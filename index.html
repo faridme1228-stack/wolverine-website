@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09090b">
+  <meta name="description" content="Fan-made promotional concept website for Marvel's Wolverine.">
+  <title>MARVEL'S WOLVERINE — The Best There Is</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #111115;
+      --panel-2: #19191f;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --red: #d92332;
+      --red-bright: #ff3446;
+      --line: rgba(255,255,255,.12);
+      --max: 1200px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 82px; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, Arial, sans-serif; overflow-x: hidden; }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .topbar {
+      position: fixed; inset: 0 0 auto; z-index: 20; height: 78px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 max(5vw, 22px); border-bottom: 1px solid transparent;
+      transition: background .3s, border-color .3s, height .3s;
+    }
+    .topbar.scrolled { height: 68px; background: rgba(8,8,10,.94); border-color: var(--line); backdrop-filter: blur(14px); }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; letter-spacing: 1.5px; font-size: 15px; }
+    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; background: var(--red); clip-path: polygon(0 0,100% 0,100% 75%,75% 100%,0 100%); font-family: 'Barlow Condensed', sans-serif; font-size: 23px; font-weight: 900; }
+    .brand small { display: block; color: #b6b6bd; font-size: 8px; letter-spacing: 2px; margin-top: 3px; }
+    .nav { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 34px); }
+    .nav a { position: relative; color: #e5e5e7; font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
+    .nav a::after { content: ""; position: absolute; left: 0; bottom: -9px; width: 0; height: 2px; background: var(--red-bright); transition: width .25s; }
+    .nav a:hover, .nav a.active { color: white; }
+    .nav a:hover::after, .nav a.active::after { width: 100%; }
+    .nav-cta { border: 1px solid rgba(255,255,255,.55); padding: 11px 16px; font-size: 10px; font-weight: 900; letter-spacing: 1.3px; transition: .25s; }
+    .nav-cta:hover { background: white; color: #09090b; }
+    .menu-toggle { display: none; border: 1px solid var(--line); color: white; background: rgba(0,0,0,.3); width: 42px; height: 42px; font-size: 22px; }
+
+    .hero { min-height: 760px; height: 100svh; max-height: 980px; position: relative; display: flex; align-items: center; overflow: hidden; isolation: isolate; background: #08080a; }
+    .video-backdrop { position: absolute; inset: 0; z-index: -3; overflow: hidden; background: #08080a; }
+    .video-backdrop video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .78; }
+    .hero-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg,rgba(5,5,7,.88) 0%,rgba(5,5,7,.43) 48%,rgba(5,5,7,.30) 100%), linear-gradient(0deg,#09090b 0%,transparent 30%,rgba(0,0,0,.2) 100%); }
+    .hero-grain { position: absolute; inset: 0; z-index: -1; opacity: .13; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
+    .hero-content { width: min(var(--max), 90%); margin: 75px auto 0; text-align: center; animation: rise 1s both; }
+    .eyebrow { display: flex; align-items: center; justify-content: center; gap: 12px; color: #f0b8bd; font-size: 10px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+    .eyebrow::before, .eyebrow::after { content: ""; width: 35px; height: 1px; background: var(--red-bright); }
+    .hero h1 { margin: 21px 0 7px; font-family: 'Barlow Condensed', Impact, sans-serif; font-size: clamp(68px, 12vw, 150px); font-weight: 900; letter-spacing: -2px; line-height: .78; text-transform: uppercase; text-shadow: 0 8px 35px rgba(0,0,0,.65); }
+    .hero h1 span { display: block; color: var(--red-bright); font-size: .52em; letter-spacing: 8px; margin-top: 22px; }
+    .hero-sub { margin: 25px auto 0; max-width: 580px; color: #dedee2; font-size: 12px; line-height: 1.9; letter-spacing: 1.3px; text-transform: uppercase; }
+    .hero-actions { display: flex; justify-content: center; gap: 13px; margin-top: 34px; flex-wrap: wrap; }
+    .btn { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 0 25px; border: 1px solid transparent; font-size: 10px; font-weight: 900; letter-spacing: 1.7px; text-transform: uppercase; cursor: pointer; transition: transform .25s, background .25s, color .25s, border-color .25s; clip-path: polygon(0 0,100% 0,100% 78%,91% 100%,0 100%); }
+    .btn:hover { transform: translateY(-3px); }
+    .btn-primary { color: white; background: var(--red); }
+    .btn-primary:hover { background: white; color: #09090b; }
+    .btn-outline { color: white; background: rgba(10,10,12,.35); border-color: rgba(255,255,255,.55); }
+    .btn-outline:hover { color: #09090b; background: white; }
+    .play-icon { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid currentColor; }
+    .hero-note { position: absolute; bottom: 35px; left: 5%; color: rgba(255,255,255,.58); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-scroll { position: absolute; bottom: 30px; right: 5%; color: #c9c9ce; font-size: 9px; letter-spacing: 3px; writing-mode: vertical-rl; }
+    .hero-scroll::after { content: ""; width: 1px; height: 43px; background: var(--red-bright); display: inline-block; margin-top: 12px; }
+
+    .section { padding: 105px 5vw; position: relative; }
+    .wrap { max-width: var(--max); margin: auto; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 38px; }
+    .kicker { color: var(--red-bright); font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+    .section h2 { margin: 10px 0 0; font-family: 'Barlow Condensed', Impact, sans-serif; font-size: clamp(45px, 7vw, 76px); line-height: .9; text-transform: uppercase; letter-spacing: .5px; }
+    .section-desc { max-width: 400px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+    .about { background: linear-gradient(180deg,#09090b,#111115 48%,#09090b); }
+    .about-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 55px; align-items: center; }
+    .about-art { min-height: 440px; position: relative; overflow: hidden; background: linear-gradient(145deg,rgba(0,0,0,.05),rgba(0,0,0,.8)), url('https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-hero-character-01-en-01oct25?wid=1400&hei=1000&fmt=jpg&fit=crop') center/cover; }
+    .about-art::before { content: ""; position: absolute; inset: 18px; border: 1px solid rgba(255,255,255,.28); }
+    .art-caption { position: absolute; left: 32px; bottom: 30px; font-family: 'Barlow Condensed'; font-size: 35px; font-weight: 800; text-transform: uppercase; }
+    .art-caption span { display: block; color: var(--red-bright); font-size: 12px; letter-spacing: 3px; }
+    .about-copy p { color: #b8b8c0; font-size: 13px; line-height: 2; }
+    .facts { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 28px; }
+    .fact { padding: 17px; border-left: 2px solid var(--red); background: rgba(255,255,255,.035); }
+    .fact strong { display: block; font-family: 'Barlow Condensed'; font-size: 23px; text-transform: uppercase; }
+    .fact span { color: var(--muted); font-size: 9px; letter-spacing: 1.3px; text-transform: uppercase; }
+
+    .gameplay { background: #0c0c0f; }
+    .gameplay-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .feature-card { min-height: 330px; position: relative; overflow: hidden; display: flex; align-items: end; padding: 26px; background: #19191f; border: 1px solid var(--line); transition: transform .35s,border-color .35s; }
+    .feature-card:hover { transform: translateY(-8px); border-color: rgba(255,52,70,.7); }
+    .feature-card::before { content: ""; position: absolute; inset: 0; background: var(--card-image) center center / cover no-repeat; opacity: .55; transition: transform .7s,opacity .4s; }
+    .feature-card:hover::before { transform: scale(1.08); opacity: .72; }
+    .feature-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg,rgba(5,5,7,.98),rgba(5,5,7,.05) 85%); }
+    .feature-content { position: relative; z-index: 1; }
+    .feature-number { color: var(--red-bright); font-size: 10px; letter-spacing: 2px; font-weight: 900; }
+    .feature-card h3 { margin: 10px 0; font-family: 'Barlow Condensed'; font-size: 34px; text-transform: uppercase; }
+    .feature-card p { color: #c2c2c8; font-size: 11px; line-height: 1.8; max-width: 290px; margin: 0; }
+
+    .gallery { background: linear-gradient(180deg,#111115,#09090b); }
+    .gallery-grid { display: grid; grid-template-columns: 1.2fr .8fr .8fr; grid-template-rows: 220px 220px; gap: 12px; }
+    .gallery-item { position: relative; overflow: hidden; background: #1a1a20; }
+    .gallery-item:first-child { grid-row: span 2; }
+    .gallery-item img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; filter: saturate(.65) brightness(.72); transition: transform .6s,filter .4s; }
+    .gallery-item:hover img { transform: scale(1.07); filter: saturate(1) brightness(.95); }
+    .gallery-item::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.12); pointer-events: none; }
+
+    .trailer { background: #09090b; }
+    .trailer-frame { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #17171c; border: 1px solid var(--line); box-shadow: 0 25px 80px rgba(0,0,0,.45); }
+    .trailer-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .trailer-caption { display: flex; justify-content: space-between; gap: 20px; margin-top: 18px; color: var(--muted); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; }
+
+    .footer { padding: 40px 5vw; border-top: 1px solid var(--line); background: #070709; }
+    .footer-inner { max-width: var(--max); margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .footer p { color: #777780; font-size: 10px; line-height: 1.8; }
+    .footer-brand { font-family: 'Barlow Condensed'; font-size: 26px; font-weight: 900; letter-spacing: 1px; }
+    .footer-brand span { color: var(--red-bright); }
+    .disclaimer { max-width: 570px; text-align: right; }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease,transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .slash { position: absolute; width: 130px; height: 2px; background: var(--red); transform: rotate(-48deg); opacity: .7; }
+    @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: .65; } 50% { opacity: 1; } }
+
+    @media (max-width: 850px) {
+      .nav { gap: 15px; }
+      .nav a { font-size: 9px; letter-spacing: 1px; }
+      .nav-cta { display: none; }
+      .about-grid { gap: 30px; }
+      .gameplay-grid { grid-template-columns: 1fr 1fr; }
+      .feature-card:last-child { grid-column: span 2; }
+      .gallery-grid { grid-template-rows: 180px 180px; }
+    }
+    @media (max-width: 650px) {
+      .topbar { height: 68px; }
+      .menu-toggle { display: block; }
+      .nav { position: fixed; inset: 68px 0 auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 12px 6vw 24px; background: rgba(8,8,10,.98); border-bottom: 1px solid var(--line); transform: translateY(-150%); transition: transform .35s; }
+      .nav.open { transform: translateY(0); }
+      .nav a { padding: 16px 0; font-size: 11px; border-bottom: 1px solid rgba(255,255,255,.07); }
+      .nav a::after { display: none; }
+      .hero { min-height: 690px; height: 92svh; }
+      .video-backdrop video { opacity: .58; }
+      .hero-content { margin-top: 50px; }
+      .hero h1 { font-size: clamp(66px,17vw,105px); }
+      .hero h1 span { letter-spacing: 4px; }
+      .hero-sub { font-size: 10px; }
+      .hero-note { left: 6%; bottom: 20px; font-size: 8px; max-width: 65%; line-height: 1.6; }
+      .hero-scroll { right: 5%; bottom: 20px; }
+      .section { padding: 75px 6vw; }
+      .section-head { display: block; }
+      .section-desc { margin-top: 18px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-art { min-height: 320px; }
+      .gameplay-grid { grid-template-columns: 1fr; }
+      .feature-card, .feature-card:last-child { min-height: 280px; grid-column: auto; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 210px 150px 150px; }
+      .gallery-item:first-child { grid-column: span 2; grid-row: auto; }
+      .trailer-caption { display: block; line-height: 1.8; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .disclaimer { text-align: left; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#home" aria-label="Marvel Wolverine home">
+      <span class="brand-mark">W</span>
+      <span>MARVEL'S WOLVERINE<small>THE BEST THERE IS</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#home" class="active">HOME</a>
+      <a href="#about">ABOUT</a>
+      <a href="#gameplay">GAMEPLAY</a>
+      <a href="#gallery">GALLERY</a>
+      <a href="#trailer">TRAILER</a>
+    </nav>
+    <a class="nav-cta" href="#trailer">WATCH TRAILER <span aria-hidden="true">↗</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="video-backdrop" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="Video awal Wolverine.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="hero-shade"></div>
+      <div class="hero-grain"></div>
+      <div class="hero-content">
+        <div class="eyebrow">MARVEL GAMES PRESENTS</div>
+        <h1>MARVEL'S<span>WOLVERINE</span></h1>
+        <p class="hero-sub">UNTAMED. UNBREAKABLE. UNLEASHED.<br>A new journey begins with the most dangerous mutant.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#about">PLAY NOW <span class="play-icon"></span></a>
+          <a class="btn btn-outline" href="#trailer">WATCH TRAILER <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="hero-note">CINEMATIC BACKGROUND • AUTOPLAY MUTED</div>
+      <div class="hero-scroll">SCROLL TO EXPLORE</div>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="kicker">01 / THE LEGEND</div><h2>THE MAN.<br>THE MYTH.</h2></div>
+          <p class="section-desc">Discover the story behind the claws. A lone warrior faces a past that refuses to stay buried.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-art reveal">
+            <div class="art-caption"><span>NO WAY BACK</span>ONLY FORWARD.</div>
+          </div>
+          <div class="about-copy reveal">
+            <div class="kicker">MEET LOGAN</div>
+            <h2>BUILT TO<br>ENDURE.</h2>
+            <p>Known to the world as Wolverine, Logan is a mutant with an extraordinary healing factor, heightened senses, and an unbreakable adamantium skeleton. Beneath the claws is a man haunted by memories, driven by instinct, and searching for the truth about his past.</p>
+            <p>Step into a brutal, personal journey where every fight leaves a mark and survival is never guaranteed.</p>
+            <div class="facts">
+              <div class="fact"><strong>LOGAN</strong><span>Also known as Wolverine</span></div>
+              <div class="fact"><strong>MUTANT</strong><span>Enhanced abilities</span></div>
+              <div class="fact"><strong>ADAMANTIUM</strong><span>Unbreakable claws</span></div>
+              <div class="fact"><strong>REGENERATION</strong><span>Accelerated healing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gameplay" id="gameplay">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="kicker">02 / THE EXPERIENCE</div><h2>UNLEASH THE<br>BEAST.</h2></div>
+          <p class="section-desc">Get closer to the instincts, abilities, and relentless fighting style that make Wolverine a force to be reckoned with.</p>
+        </div>
+        <div class="gameplay-grid">
+          <article class="feature-card reveal" style="--card-image:url('https://gmedia.playstation.com/is/image/SIEPDC/wolverine-screenshot-02-en-30sept25?wid=1000&hei=800&fmt=jpg&fit=crop')">
+            <div class="feature-content"><div class="feature-number">01 — CLOSE QUARTERS</div><h3>BRUTAL COMBAT</h3><p>Get up close. Strike hard. Let the adamantium claws do the talking.</p></div>
+          </article>
+          <article class="feature-card reveal" style="--card-image:url('https://gmedia.playstation.com/is/image/SIEPDC/wolverine-screenshot-03-en-30sept25?wid=1000&hei=800&fmt=jpg&fit=crop')">
+            <div class="feature-content"><div class="feature-number">02 — MUTANT INSTINCT</div><h3>HEIGHTENED SENSES</h3><p>Read the environment, track your targets, and trust your instincts.</p></div>
+          </article>
+          <article class="feature-card reveal" style="--card-image:url('https://gmedia.playstation.com/is/image/SIEPDC/wolverine-screenshot-05-en-30sept25?wid=1000&hei=800&fmt=jpg&fit=crop')">
+            <div class="feature-content"><div class="feature-number">03 — NEVER DOWN</div><h3>REGENERATION</h3><p>Push through the pain with a healing factor that refuses to quit.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery" id="gallery">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="kicker">03 / VISUAL ARCHIVE</div><h2>IN THE<br>SHADOWS.</h2></div>
+          <p class="section-desc">A visual archive of Logan, his enemies, and the world of Marvel’s Wolverine.</p>
+        </div>
+        <div class="gallery-grid reveal">
+          <div class="gallery-item"><img src="https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-deathstrikefight-screenshot-02-en-15sept26?wid=1200&hei=900&fmt=jpg&fit=crop" alt="Wolverine fighting Lady Deathstrike" loading="lazy"></div>
+          <div class="gallery-item"><img src="https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-wheel-screenshot-09-en-15sept26?wid=900&hei=700&fmt=jpg&fit=crop" alt="Wolverine in a dramatic game scene" loading="lazy"></div>
+          <div class="gallery-item"><img src="https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-essex-screenshot-03-en-15sept26?wid=900&hei=700&fmt=jpg&fit=crop" alt="Logan speaking with Essex" loading="lazy"></div>
+          <div class="gallery-item"><img src="https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-jean-screenshot-04-en-15sept26?wid=900&hei=700&fmt=jpg&fit=crop" alt="Jean Grey" loading="lazy"></div>
+          <div class="gallery-item"><img src="https://gmedia.playstation.com/is/image/SIEPDC/marvels-wolverine-mystique-screenshot-05-en-15sept26?wid=900&hei=700&fmt=jpg&fit=crop" alt="Mystique" loading="lazy"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section trailer" id="trailer">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="kicker">04 / OFFICIAL VIDEO</div><h2>WITNESS THE<br>FEROCITY.</h2></div>
+          <p class="section-desc">Watch the trailer you selected. Use the player controls to turn on sound or watch in full screen.</p>
+        </div>
+        <div class="trailer-frame reveal">
+          <video controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000">
+            <source src="Video yg bawah.mp4" type="video/mp4">
+            Browser kamu belum mendukung pemutar video MP4.
+          </video>
+        </div>
+        <div class="trailer-caption"><span>MARVEL'S WOLVERINE — TRAILER</span><span>PLAY WITH SOUND • FULL SCREEN AVAILABLE</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">MARVEL'S <span>WOLVERINE</span></div>
+        <p>THE BEST THERE IS.</p>
+      </div>
+      <p class="disclaimer">Fan-made, non-commercial website concept for educational purposes. Marvel, Wolverine, and related characters and marks belong to their respective owners. This page is not affiliated with or endorsed by Marvel or the game developers.</p>
+    </div>
+  </footer>
+
+  <script>
+    const topbar = document.getElementById('topbar');
+    const nav = document.getElementById('nav');
+    const menuToggle = document.getElementById('menuToggle');
+
+    window.addEventListener('scroll', () => {
+      topbar.classList.toggle('scrolled', window.scrollY > 30);
+    });
+
+    menuToggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      document.body.classList.toggle('menu-open', opened);
+      menuToggle.setAttribute('aria-expanded', String(opened));
+      menuToggle.textContent = opened ? '×' : '☰';
+    });
+
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.textContent = '☰';
+      });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('.nav a');
+    const activeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    sections.forEach(section => activeObserver.observe(section));
+  </script>
+</body>
+</html>
